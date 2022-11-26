@@ -1,0 +1,31 @@
+{%extends 'main.html' %}
+{%block content%}
+
+{%if error%}
+<h4 style="text-align: center;color:red;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{error}}</h4>
+{%endif%}
+
+<div class="login">
+  <form method="post">
+    <div style="display:flex; justify-content:center;height:75vh;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">
+      <div class="col-sm-4 col-10 my-2" style="border-radius:5px;background-color:rgb(38, 97, 97);">
+          <h3 style="text-align: center;color:white;height:25vh" class="my-2">Login</h3>
+
+          <div style="width:fit-content;margin:auto;color:white;">
+                  <p class="my-1"><h6>Username</h6></p>
+          <input type="text" id="username" name="name" placeholder="Enter the username....">
+          {%csrf_token%}
+      <p><button type="submit" class="btn btn-light btn-lg btn-block my-3" id="submit" disabled><strong>Login</strong></button></p>
+    </div>
+        </div>
+    </div>
+  </form>
+</div>
+<script>
+  username.oninput =()=>{
+    if (username.value.length>0){
+      submit.disabled=false;
+    }
+  }
+</script>
+{%endblock%}

@@ -1,0 +1,57 @@
+{%extends 'main.html' %}
+{%block content%}
+
+<div class="container my-4 border d-flex justify-content-between flex-column" style="height:600px;">
+    <div>
+        <div class="border-bottom d-flex align-items-center justify-content-between" style="height:70px;" >
+            <h2 class="text-primary float-start">Public Chat Room</h2>
+        </div>
+    </div>
+    <div class="chatroom py-3 px-3"  style="overflow-y: scroll; height:450px">
+    </div>
+    <div class="border d-flex"  height=500>
+        <input id="inputval" type="text" placeholder="Message Here" class="form-control">
+        <button onclick ="buttonclicked()"class="btn btn-outline-primary">Send</button>
+    </div>
+</div>
+
+<script>
+    var user = "{{user}}";    
+    const ws = new WebSocket(`ws://127.0.0.1:8000/chat/${user}/`)
+    function  buttonclicked(){
+        const input = document.getElementById('inputval').value;
+        console.log(input)
+        ws.send(JSON.stringify(
+            {
+                command:'send',
+                message:input,
+                user:user,
+            }
+        ))
+    }
+    ws.onmessage = (e) =>{
+        const data = JSON.parse(e.data);
+        console.log(data)
+        if (data.command=="send"){
+            const chat = document.getElementsByClassName("chatroom")[0];
+            const message = ` 
+            <div class="d-flex flex-column justify-content-center ">
+             <div class="d-flex align-items-center justify-content-between" style="width:150px;">
+             <h6>${data.user}</h6>
+             </div>
+             <h5 class="message">${data.message}</h5>
+            </div>`
+            chat.innerHTML += message;
+            input = document.getElementById('inputval').value="";
+            $(function() {
+                getMessages();
+            });   
+        }
+
+    }
+    function getMessages(letter) {
+        var div = $(".chatroom");
+        div.scrollTop(div.prop('scrollHeight'));
+    }
+</script>
+{%endblock%}
